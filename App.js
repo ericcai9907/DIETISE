@@ -4,15 +4,15 @@ import {Component, SafeAreaView,Button, View, Text,StyleSheet,TextInput, Touchab
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Camera from './Camera.js';
+
 function HomeScreen({ navigation }) {
- /*
- state={
-    name:"",
-    password:""
-  }
-  */
-  return (
+
+const [name,setName] = useState("Kevin");
+const [password,setPassword] = useState("1234");
   
+  return (
+
+ 
       <SafeAreaView style = {styles.container}>
      
         <Text style={styles.logo}>Dietise</Text>
@@ -21,7 +21,7 @@ function HomeScreen({ navigation }) {
             style={styles.inputText}
             placeholder="UserName" 
             placeholderTextColor="#003f5c"
-            onChangeText={text => this.setState({name:text})}/>
+            onChangeText={text => setName({name:text})}/>
         </View>
         
          <View>
@@ -38,7 +38,7 @@ function HomeScreen({ navigation }) {
             style={styles.inputText}
             placeholder="Password" 
             placeholderTextColor="#003f5c"
-            onChangeText={text => this.setState({password:text})}/>
+            onChangeText={text => setPassword({password:text})}/>
         </View>
         <TouchableOpacity>
           <Text style={styles.forgot}>Forgot Password?</Text>
@@ -58,13 +58,8 @@ function HomeScreen({ navigation }) {
 
 function DetailsScreen({ navigation }) {
   return (
-   <SafeAreaView style = {styles.container}>
-     
-       
-        
+   <SafeAreaView style = {styles.container}>   
          <View>
-      
-     
     </View>
       
         <TouchableOpacity style={styles.loginBtn}>
