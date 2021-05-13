@@ -7,21 +7,30 @@ import db from '../constants/firebase.config';
 
 
 function ProfileScreen() {
-    const [userInfo, setUserInfo] = useState([]);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [diet, setDiet] = useState("");
+    const [searches, setSearches] = useState(null);
     const getUser = async () => {
-        const profileRef = db.collection('user_profile_example');
-        const snapShot = await profileRef.get();
-        snapShot.docs.forEach(item => {
-            setUserInfo([...userInfo,item.data().email])
-        })
-        
+        const profileRef = await db.collection('user_profile_example').doc('john_doe').get();
+        const userEmail = profileRef.data().email;
+        const userName = profileRef.data().name;
+        const userDiet = profileRef.data().diet;
+        const userDishSearches = profileRef.data().dish_searches;
+        setName(userName);
+        setEmail(userEmail);
+        setDiet(userDiet);
+        setSearches(userDishSearches);
     }
-    useEffect( () => {
+    useEffect(() => {
         getUser();
     },[])
     return (
         <View style = {styles.container}>
-            <Text style={styles.baseText}>{userInfo}</Text>
+            <Text style={styles.baseText}>{name}</Text>
+            <Text style={styles.baseText}>{email}</Text>
+            <Text style={styles.baseText}>Diet Restrictions: {diet}</Text>
+            <Text style={styles.baseText}>Number of Dish Searches: {searches}</Text>
         </View>
     );
 }
@@ -49,6 +58,6 @@ const styles = StyleSheet.create({
         padding: 30,
     },
     baseText: {
-        fontSize: 30,
+        fontSize: 25,
     },
 })
