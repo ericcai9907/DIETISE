@@ -1,24 +1,30 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 
+
+
 function HomeScreen({navigation}) {
     return (
+
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity style={styles.login_button} onPress={() => navigation.navigate("Recipe")}>
-          <Text style={styles.loginText}>Search Recipes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.login_button} onPress={() => navigation.navigate("Recipe")}>
-          <Text style={styles.loginText}>My Recipes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.login_button} onPress={() => navigation.navigate("Recipe")}>
-          <Text style={styles.loginText}>My Diet</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.login_button} onPress={() => navigation.navigate("Recipe")}>
-          <Text style={styles.loginText}>MyAccount</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Recipe")}>
-          <Text style={styles.loginText}>Optional Backup</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.login_button} onPress={() => navigation.navigate("Recipe")}>
+            <Text style={styles.loginText}>Search Recipes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.login_button} onPress={() => navigation.navigate("Recipe")}>
+            <Text style={styles.loginText}>My Recipes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.login_button} onPress={() => navigation.navigate("Recipe")}>
+            <Text style={styles.loginText}>My Diet</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.login_button} onPress={() => navigation.navigate("Profile")}>
+            <Text style={styles.loginText}>MyAccount</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Recipe")}>
+            <Text style={styles.loginText}>Optional Backup</Text>
+          </TouchableOpacity>
+          
+    
+  
 
       </SafeAreaView>
     );

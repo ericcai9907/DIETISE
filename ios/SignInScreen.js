@@ -1,17 +1,20 @@
+// @refresh reset
 import React from 'react';
-import {useState} from 'react';
+import { useState, useEffect } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
     Component,
     SafeAreaView,
-    ImageBackground,
     TextInput,
     View,
     Text,
-    Button,
     StyleSheet,
     TouchableOpacity,
-    Touchable
 } from 'react-native';
+
+
+
+
 
 function SignInScreen({navigation}) {
     
@@ -23,7 +26,6 @@ function SignInScreen({navigation}) {
                     style={styles.inputText}
                     placeholder="Username"
                     placeholderTextColor="#fff"
-                    onChangeText={text => this.setState({name:text})}
                 />
             </View>
             
@@ -33,7 +35,6 @@ function SignInScreen({navigation}) {
                     style={styles.inputText}
                     placeholder="Password"
                     placeholderTextColor="#fff"
-                    onChangeText={text => this.setState({password:text})}
                 />
             </View>
             <TouchableOpacity>
