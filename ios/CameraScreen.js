@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect} from 'react';
 import { Dimensions, StyleSheet, View, TouchableOpacity, Text, SafeAreaView} from 'react-native';
 import { Camera } from 'expo-camera';
 
@@ -8,13 +8,13 @@ const WINDOW_HEIGHT = Dimensions.get("window").height;
 const closeButtonSize = Math.floor(WINDOW_HEIGHT * 0.032);
 const captureSize = Math.floor(WINDOW_HEIGHT * 0.09);
 
-function CameraScreen() {
+function CameraScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(null);
     const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
     const [isPreview, setIsPreview] = useState(false);
     const [isCameraReady, setIsCameraReady] = useState(false);
+
     const cameraRef = useRef();
-    
     useEffect(() => {
         (async () => {
             const { status } = await Camera.requestPermissionsAsync();
@@ -29,12 +29,13 @@ function CameraScreen() {
     const takePicture = async () => {
         if (cameraRef.current) {
             const options = { quality: 0.5, base64: true, skipProcessing: true };
-            const data = await cameraRef.current.takePictureAsync(options);
-            const source = data.uri;
+            const photo = await cameraRef.current.takePictureAsync(options);
+            const source = photo.uri;
             if (source) {
                 await cameraRef.current.pausePreview();
                 setIsPreview(true);
                 console.log("picture source", source);
+                navigation.navigate('Picture', {'photo' : photo});
             }
         }
     };
@@ -57,11 +58,14 @@ function CameraScreen() {
 
     const renderCancelPreviewButton = () => (
         <TouchableOpacity onPress={cancelPreview} style={styles.closeButton}>
-            <View style={[styles.closeCross, { transform: [{ rotate: "45deg" }] }]}/>
-            <View
-                style={[styles.closeCross, { transform: [{ rotate: "-45deg" }] }]}
-            />
+                <View style={[styles.closeCross, { transform: [{ rotate: "45deg" }] }]}/>
+                <View
+                    style={[styles.closeCross, { transform: [{ rotate: "-45deg" }] }]}
+                />
         </TouchableOpacity>
+            
+        
+        
     );
     
     const renderCaptureControl = () => (
@@ -98,6 +102,7 @@ function CameraScreen() {
                 {isPreview && renderCancelPreviewButton()}
                 {!isPreview && renderCaptureControl()}
             </View>
+            
         </SafeAreaView>
     );
 }
@@ -107,6 +112,16 @@ export default CameraScreen;
 const styles = StyleSheet.create({
     container: {
       ...StyleSheet.absoluteFillObject,
+    },
+    usePhotoButton: {
+        width:"80%",
+        backgroundColor:"#fb5b5a",
+        borderRadius:25,
+        height:50,
+        alignItems:"center",
+        justifyContent:"center",
+        marginTop:40,
+        marginBottom:10,
     },
     closeButton: {
       position: "absolute",
