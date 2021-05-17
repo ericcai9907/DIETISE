@@ -1,10 +1,12 @@
 import * as React from 'react';
-import {useState,useEffect} from 'react';
+import {useState,useEffect, useContext} from 'react';
 import {Image, Component, SafeAreaView,Button, View, Text,StyleSheet,TextInput, FlatList,TouchableOpacity,TouchableHighlight } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Camera from './Camera.js';
 import axios from 'axios';
+import './context.js';
+
 
 
 //import firebase from "firebase/app";
@@ -99,7 +101,7 @@ const usersCollection = firestore().collection('Users');
          <View>
     </View>
       
-        <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('camera')}>
+        <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('text')}>
           <Text style={styles.loginText}>Search Recipes</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('profile')}>
@@ -178,6 +180,32 @@ function SignInScreen({navigation}) {
   );
 }
 
+function insertOrPictureScreen({navigation}) {
+  const [recipe, setRecipe] = React.useState('');
+global.config.collection = recipe;
+
+  return (
+      <SafeAreaView style = {styles.container}>
+<Text style={styles.logo}>Please input your recipe here</Text>
+        <View style={styles.inputView} >
+      <TextInput
+      style={styles.inputText}
+       PlaceholderTextColor="#003f5c"
+        placeholder="recipe here"
+        value={recipe}
+        onChangeText={setRecipe}
+      />
+
+
+      </View>
+      <Button title="take me to recipe" onPress={() => navigation.navigate('recipleDisplay')} />
+         <TouchableOpacity  onPress={() => navigation.navigate('camera')} >
+          <Text style={styles.forgot}>Go to Camera</Text>
+        </TouchableOpacity>
+      
+       	</SafeAreaView>
+  );
+}
 function PictureScreen({navigation}) {
  
 
@@ -194,7 +222,7 @@ function PictureScreen({navigation}) {
 
 
 function ProfileScreen({navigation}) {
-  const [doneState, setDone] = React.useState(false);
+
  
   const [filetext, setNewArray] = useState([]);
   const config = {
@@ -208,12 +236,15 @@ function ProfileScreen({navigation}) {
   
 
    const getUser = async () => {
-	const recipeRef = firestore().collection('baby_back_ribs');
+   	global.config.collection = 'banh_xeo';
+	const recipeRef = firestore().collection('banh_xeo');
 	const snapshot = await recipeRef.get();
 	snapshot.forEach(doc => { doc.id, '=>', doc.data();
- 	setNewArray(filetext => [...filetext, doc.data().title]);
-        
-        
+	
+ 	setNewArray(filetext => [...filetext, {'title' :doc.data().title , 'ID': doc.id } ]       )    ;
+
+	console.log("\n");
+       console.log(filetext);
         })
         
     }
@@ -253,8 +284,9 @@ const FooterComponent = () => {
   
 const renderItem = ({ item }) => (
             <React.Fragment>
-    <AuthorInfo recipe={item} />
-    <Button title="press me to show you the recipe"  onPress={() => navigation.navigate('recipeDetails')} />
+    <AuthorInfo recipe={item.title} />
+    
+    <Button title="press me to show you the recipe"  onPress={() => {navigation.navigate('recipeDetails');console.log(item.title);global.config.id = item.ID }} />
                 </React.Fragment>
   );
 
@@ -271,6 +303,93 @@ const renderItem = ({ item }) => (
         ListFooterComponent={FooterComponent}
         
       />
+       <Button title="press me"  onPress={() => console.log(global.config.id)} />
+    </SafeAreaView>
+  );
+}
+function ProfileScreen2({navigation}) {
+
+ 
+  const [filetext, setNewArray] = useState([]);
+  const config = {
+	apiKey: "AIzaSyB-FhJXYwoBRZ8ys_MRtrLi8nAp1S77Ppo",
+	projectId: "recipes-a6ca1",
+	storageBucket: "recipes-a6ca1.appspot.com",
+	databaseURL:  "https://recipes-a6ca1-default-rtdb.firebaseio.com"
+	 
+};
+
+  
+
+   const getUser = async () => {
+
+	const recipeRef = firestore().collection(global.config.collection);
+	const snapshot = await recipeRef.get();
+	snapshot.forEach(doc => { doc.id, '=>', doc.data();
+	
+ 	setNewArray(filetext => [...filetext, {'title' :doc.data().title , 'ID': doc.id } ]       )    ;
+
+	console.log("\n");
+       console.log(filetext);
+        })
+        
+    }
+    useEffect( () => {
+        getUser();
+    },[])
+    
+    const AuthorInfo = ({  recipe }) => (
+  <View style={styles.item}>
+    <Text style={styles.title}>{'Recipe : ' + recipe}</Text>
+  </View>
+);
+
+
+
+  const SeparatorComponent = () => {
+  return <View style={styles.separatorLine} />
+}
+
+const HeaderComponent = () => {
+  return (
+    <View style={styles.sectionContainer}>
+      <Text style={styles.sectionDescription}>Our List of Recipe!!</Text>
+    </View>
+  );
+};
+
+const FooterComponent = () => {
+  return (
+    <View style={styles.sectionContainer}>
+      <Text style={styles.sectionDescription}>
+        credit to the ad guy.
+      </Text>
+    </View>
+  );
+};
+  
+const renderItem = ({ item }) => (
+            <React.Fragment>
+    <AuthorInfo recipe={item.title} />
+    
+    <Button title="press me to show you the recipe"  onPress={() => {navigation.navigate('recipeDetails');console.log(item.title);global.config.id = item.ID }} />
+                </React.Fragment>
+  );
+
+
+  return (
+  
+     <SafeAreaView style={styles.container}>
+      <FlatList
+        data={filetext}
+        renderItem={renderItem}
+        keyExtractor={item => item}
+        ItemSeparatorComponent={SeparatorComponent}
+        ListHeaderComponent={HeaderComponent}
+        ListFooterComponent={FooterComponent}
+        
+      />
+       <Button title="press me"  onPress={() => console.log(global.config.id)} />
     </SafeAreaView>
   );
 }
@@ -287,7 +406,7 @@ function recipeDetailsScreen({navigation}) {
   
 
    const getUser = async () => {
-	const recipeRef = firestore().collection('baby_back_ribs').doc("04n2tBX7oo4ZS5hnr20n");
+	const recipeRef = firestore().collection(global.config.collection).doc(global.config.id);
 	const snapshot = await recipeRef.get();
 	setNewArray(filetext => [...filetext, snapshot.data().ingredients]);
 	 setNewArray(filetext => [...filetext, snapshot.data().instructions]);
@@ -331,7 +450,6 @@ const FooterComponent = () => {
     </View>
   );
 }
-
 
   return (
       <SafeAreaView style = {styles.container}>
@@ -572,7 +690,9 @@ export default function App({ navigation }) {
          <Stack.Screen name="profile" component={ProfileScreen} />
           <Stack.Screen name="Picture" component={PictureScreen} />
            <Stack.Screen name="recipeDetails" component={recipeDetailsScreen} />
-
+           <Stack.Screen name="text" component={insertOrPictureScreen} />
+            <Stack.Screen name="recipleDisplay" component={ProfileScreen2} />
+           
           </React.Fragment>
           )}
         </Stack.Navigator>
