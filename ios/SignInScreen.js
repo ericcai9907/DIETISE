@@ -1,9 +1,7 @@
 // @refresh reset
 import React from 'react';
-import { useState, useEffect } from 'react';
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useState } from 'react';
 import {
-    Component,
     SafeAreaView,
     TextInput,
     View,
@@ -11,42 +9,62 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-
-
-
-
+import firebase from '../constants/firebase.config';
 
 function SignInScreen({navigation}) {
-    
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const signIn = async () => {
+        try {
+            await firebase.auth().signInWithEmailAndPassword(email, password);
+            navigation.navigate('Home');
+        } catch (err) {
+            setError(err.message);
+        }
+    }
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.logo_title}>Dietise</Text>
             <View style={styles.inputView}>
                 <TextInput 
                     style={styles.inputText}
-                    placeholder="Username"
+                    autoCapitalize = 'none'
+                    placeholder="Email"
                     placeholderTextColor="#fff"
+                    onChangeText = {setEmail}
+                    value = {email}
                 />
             </View>
             
             <View style={styles.inputView}>
                 <TextInput
-                    secureTextEntry
                     style={styles.inputText}
+                    autoCapitalize = 'none'
                     placeholder="Password"
                     placeholderTextColor="#fff"
+                    onChangeText = {setPassword}
+                    value = {password}
+                    secureTextEntry
                 />
             </View>
+            {
+                error ?
+                    <Text style={{ color: 'red'}}>{error}</Text>
+                    : null
+            }
             <TouchableOpacity>
                 <Text style={styles.forgot}>Forgot Password</Text>
             </TouchableOpacity>
             <TouchableOpacity 
                 style={styles.login_button}
-                onPress={() => navigation.navigate("Home")} >
+                onPress={() => signIn()} >
                     <Text>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
-                <Text style={styles.loginText}>Signup</Text>
+            <TouchableOpacity
+                onPress={() => navigation.navigate("SignUp")}>
+                <Text style={styles.loginText}>Sign-Up</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
