@@ -1,6 +1,6 @@
 // @refresh reset
 import React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import {
     SafeAreaView,
     TextInput,
@@ -9,20 +9,32 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
+
+import { UserContext } from '../constants/UserContext';
 import firebase from '../constants/firebase.config';
 
 function SignInScreen({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-
+    const { setUserData } = useContext(UserContext);
+    const db = firebase.firestore();
     const signIn = async () => {
         try {
             await firebase.auth().signInWithEmailAndPassword(email, password);
+            getUser();
             navigation.navigate('Home');
         } catch (err) {
             setError(err.message);
         }
+    }
+
+    const getUser = async () => {
+        const querySnapshot = await db.collection('user_profile_example').where("email", "==", email).get();
+        const profDocs = querySnapshot.docs;
+        console.log(profDocs[0].data());
+        setUserData(profDocs[0].data());
+       // console.log(JSON.stringify(snapshot.data(), null, 2));
     }
     return (
         <SafeAreaView style={styles.container}>
