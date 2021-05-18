@@ -19,7 +19,7 @@ import './context.js';
 
 import firestore from "@react-native-firebase/firestore";
 
-
+const CurrentUser = "kevin Gao";
 const AuthContext = React.createContext();
 
 function SplashScreen() {
@@ -233,15 +233,16 @@ function ProfileScreen({navigation}) {
 	 
 };
 
-  
+ 
 
    const getUser = async () => {
-   	global.config.collection = 'banh_xeo';
-	const recipeRef = firestore().collection('banh_xeo');
+   global.config.userName = CurrentUser;
+   	const recipeRef = firestore().collection('user_profile_example').doc(global.config.userName).collection('recipes');
+	
 	const snapshot = await recipeRef.get();
 	snapshot.forEach(doc => { doc.id, '=>', doc.data();
 	
- 	setNewArray(filetext => [...filetext, {'title' :doc.data().title , 'ID': doc.id } ]       )    ;
+ 	setNewArray(filetext => [...filetext, doc.id ]       )    ;
 
 	console.log("\n");
        console.log(filetext);
@@ -284,9 +285,9 @@ const FooterComponent = () => {
   
 const renderItem = ({ item }) => (
             <React.Fragment>
-    <AuthorInfo recipe={item.title} />
+    <AuthorInfo recipe={item} />
     
-    <Button title="press me to show you the recipe"  onPress={() => {navigation.navigate('recipeDetails');console.log(item.title);global.config.id = item.ID }} />
+    <Button title="press me to show you the recipe"  onPress={() => {navigation.navigate('recipeDetailsFavorite');global.config.title = item }} />
                 </React.Fragment>
   );
 
@@ -307,6 +308,84 @@ const renderItem = ({ item }) => (
     </SafeAreaView>
   );
 }
+
+function recipeDetailsScreenfavorite({navigation}) {
+  const [filetext, setNewArray] = useState([]);
+  const config = {
+	apiKey: "AIzaSyB-FhJXYwoBRZ8ys_MRtrLi8nAp1S77Ppo",
+	projectId: "recipes-a6ca1",
+	storageBucket: "recipes-a6ca1.appspot.com",
+	databaseURL:  "https://recipes-a6ca1-default-rtdb.firebaseio.com"
+	 
+};
+
+
+
+   const getUser = async () => {
+	const recipeRef = firestore().collection('user_profile_example').doc(global.config.userName).collection('recipes').doc(global.config.title);
+	const snapshot = await recipeRef.get();
+	setNewArray(filetext => [...filetext, snapshot.data().ingredients]);
+	 setNewArray(filetext => [...filetext, snapshot.data().instructions]);
+        
+    }
+    useEffect( () => {
+        getUser();
+    },[])
+     const AuthorInfo = ({ ingred }) => (
+  <View style={styles.item}>
+    <Text style={styles.title}>{'Ingredients : ' + ingred}</Text>
+
+  </View>
+);
+
+  const renderItem = ({ item }) => (
+     <React.Fragment>
+    <AuthorInfo ingred={item}  />
+    
+                </React.Fragment>
+
+  );
+
+  const SeparatorComponent = () => {
+  return <View style={styles.separatorLine} />
+}
+
+
+const HeaderComponent = () => {
+  return (
+    <View style={styles.sectionContainer}>
+      <Text style={styles.sectionDescription}>Our List of Recipe details!!</Text>
+    </View>
+  );
+};
+
+const FooterComponent = () => {
+  return (
+    <View style={styles.sectionContainer}>
+      <Text style={styles.sectionDescription}>
+        credit to dietise
+      </Text>
+    </View>
+  );
+}
+
+  return (
+      <SafeAreaView style = {styles.container}>
+   <FlatList
+        data={filetext}
+        renderItem={renderItem}
+        keyExtractor={item => item}
+        ItemSeparatorComponent={SeparatorComponent}
+        ListHeaderComponent={HeaderComponent}
+        ListFooterComponent={FooterComponent}
+        
+      />
+           
+       	</SafeAreaView>
+  );
+}
+
+
 function ProfileScreen2({navigation}) {
 
  
@@ -372,7 +451,7 @@ const renderItem = ({ item }) => (
             <React.Fragment>
     <AuthorInfo recipe={item.title} />
     
-    <Button title="press me to show you the recipe"  onPress={() => {navigation.navigate('recipeDetails');console.log(item.title);global.config.id = item.ID }} />
+    <Button title="press me to show you the recipe"  onPress={() => {navigation.navigate('recipeDetails');console.log(item.title);global.config.id = item.ID,global.config.title = item.title }} />
                 </React.Fragment>
   );
 
@@ -423,9 +502,10 @@ function recipeDetailsScreen({navigation}) {
 );
 
   const renderItem = ({ item }) => (
-
+     <React.Fragment>
     <AuthorInfo ingred={item}  />
     
+                </React.Fragment>
 
   );
 
@@ -433,9 +513,16 @@ function recipeDetailsScreen({navigation}) {
   return <View style={styles.separatorLine} />
 }
 
+ const pushData = async () => {
+	const recipeRef = firestore().collection('user_profile_example').doc(global.config.userName).collection('recipes').doc(global.config.title);
+	const snapshot = await recipeRef.set({'ingredients' : filetext[0], 'instructions' : filetext[1]});
+	
+        
+    }
 const HeaderComponent = () => {
   return (
     <View style={styles.sectionContainer}>
+     <Button title="press me to save a reciple for you"  onPress={() => {console.log(global.config.title); global.config.userName = CurrentUser; console.log(global.config.userName);console.log(filetext[0]);pushData() }} />
       <Text style={styles.sectionDescription}>Our List of Recipe details!!</Text>
     </View>
   );
@@ -692,7 +779,7 @@ export default function App({ navigation }) {
            <Stack.Screen name="recipeDetails" component={recipeDetailsScreen} />
            <Stack.Screen name="text" component={insertOrPictureScreen} />
             <Stack.Screen name="recipleDisplay" component={ProfileScreen2} />
-           
+            <Stack.Screen name="recipeDetailsFavorite" component={recipeDetailsScreenfavorite} />
           </React.Fragment>
           )}
         </Stack.Navigator>
