@@ -4,8 +4,36 @@ import {Image, Component, SafeAreaView,Button, View, Text,StyleSheet,TextInput, 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Camera from './Camera.js';
-import axios from 'axios';
+import Tflite from 'tflite-react-native';
 import './context.js';
+
+let tflite = new Tflite();
+let imagepath = 'file://sdcard/Download/3_2.jpg';
+tflite.loadModel({
+  model: 'food-id-red23lite.tflite',// required
+  labels: 'dishforandroid.txt',  // required
+  numThreads: 1,                              // defaults to 1  
+},
+(err, res) => {
+  if(err)
+    console.log(err);
+  else
+    console.log(res);
+        console.log(imagepath);
+});
+
+
+tflite.runModelOnImage({
+  path: imagepath,  // required
+  numResults: 5,    // defaults to 5
+  threshold: 0.1   // defaults to 0.1
+},
+(err, res) => {
+  if(err)
+    console.log(err);
+  else
+    console.log(res[0].label);
+});
 
 
 
@@ -333,7 +361,7 @@ function recipeDetailsScreenfavorite({navigation}) {
     },[])
      const AuthorInfo = ({ ingred }) => (
   <View style={styles.item}>
-    <Text style={styles.title}>{'Ingredients : ' + ingred}</Text>
+    <Text style={styles.title}>{'Recipe Details : ' + ingred}</Text>
 
   </View>
 );
@@ -496,7 +524,7 @@ function recipeDetailsScreen({navigation}) {
     },[])
      const AuthorInfo = ({ ingred }) => (
   <View style={styles.item}>
-    <Text style={styles.title}>{'Ingredients : ' + ingred}</Text>
+    <Text style={styles.title}>{'Recipe Details : ' + ingred}</Text>
 
   </View>
 );
