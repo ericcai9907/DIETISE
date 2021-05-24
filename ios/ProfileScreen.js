@@ -2,8 +2,6 @@ import React, { useContext } from 'react';
 import { UserContext } from '../constants/UserContext';
 import { View, Text, StyleSheet } from 'react-native';
 
-import firebase from '../constants/firebase.config';
-
 function ProfileScreen() {
     const { userData } = useContext(UserContext);
     return (
