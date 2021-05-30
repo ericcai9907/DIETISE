@@ -4,7 +4,8 @@ module.exports = global.config = {
 	collection:"",
 	userName : "",
 	ingred: [],
-	instruct : []
+	instruct : [],
+	dishname : "",
 };
 
 

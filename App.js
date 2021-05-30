@@ -3,7 +3,7 @@ import {useState,useEffect, useContext} from 'react';
 import {Image, Component, SafeAreaView,Button, View, Text,StyleSheet,TextInput, FlatList,TouchableOpacity,TouchableHighlight } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Camera from './Camera.js';
+import CameraScreen from './Camera.js';
 import Tflite from 'tflite-react-native';
 import './context.js';
 
@@ -82,39 +82,6 @@ function RecipeScreen({navigation}) {
       />
     </View>
     	</SafeAreaView>
-  );
-}
-  function onPicture({uri}) {
-    setImg(uri);
-  }
-
-  function onBackToCamera() {
-    setImg(null);
-  }
-function CameraScreen({navigation}) {
-const [img, setImg] = useState(null);
-
-
-
-
-  return (
-   <>
-      <SafeAreaView style={{flex: 1}}>
-        {img ? (
-          <TouchableHighlight
-            style={{flex: 1}}
-            onPress={() => {
-              onBackToCamera();
-            }}>
-            <Image source={{uri: img}} style={{flex: 1}} />
-          </TouchableHighlight>
-          
-        ) : (
-          <Camera onPicture={onPicture} />
-        )}
-      </SafeAreaView>
-      
-    </>
   );
 }
 
@@ -305,7 +272,7 @@ const FooterComponent = () => {
   return (
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionDescription}>
-        credit to the ad guy.
+        credit to the dietise group.
       </Text>
     </View>
   );
@@ -391,7 +358,7 @@ const FooterComponent = () => {
   return (
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionDescription}>
-        credit to dietise
+        credit to dietise group
       </Text>
     </View>
   );
@@ -469,7 +436,7 @@ const FooterComponent = () => {
   return (
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionDescription}>
-        credit to the ad guy.
+        credit to the dietise group.
       </Text>
     </View>
   );
@@ -560,7 +527,7 @@ const FooterComponent = () => {
   return (
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionDescription}>
-        credit to dietise
+        credit to dietise group
       </Text>
     </View>
   );
@@ -581,6 +548,7 @@ const FooterComponent = () => {
        	</SafeAreaView>
   );
 }
+
 function FirstSignInScreen() {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -910,6 +878,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: 'black',
   },
+  
   
 });
 
