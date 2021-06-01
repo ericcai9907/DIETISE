@@ -1,20 +1,32 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, TextInput, Button, StyleSheet } from 'react-native';
 
 function RecipeScreen({navigation}) {
+    const [dish, setDish] = useState('');
+    const [error, setError] = useState('');
+    
+    const searchRecipe = () => {
+      let temp_dish = dish;
+      if (temp_dish.length == 0) return;
+      temp_dish = temp_dish.toLowerCase().replaceAll(' ', '_');
+      console.log(temp_dish);
+      navigation.navigate('RecipeDisplay', {search_dish: temp_dish});
+    }
+    
     return (
       <SafeAreaView style={styles.container}>
         <TouchableOpacity style={styles.login_button} onPress={() => navigation.navigate("Camera")}>
-          <Text style={styles.loginText}>Take Picture</Text>
+          <Text style={styles.loginText}>Use Picture</Text>
         </TouchableOpacity>
         <View style={styles.inputView} >
           <TextInput  
-            secureTextEntry
             style={styles.inputText}
-            placeholder="Enter a recipe here" 
-            placeholderTextColor="#003f5c"
-            onChangeText={text => this.setState({password:text})}/>
+            placeholder="Enter a dish here" 
+            placeholderTextColor="#fff"
+            onChangeText={setDish}
+            value = {dish} />
         </View>
+        <Button title = "Get me the recipe" onPress={() => searchRecipe()}/>
       </SafeAreaView>
       
     );
