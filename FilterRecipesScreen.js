@@ -1,15 +1,15 @@
 
 import React from 'react';
-import {ImageBackground, View, Text, Button, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import firestore from "@react-native-firebase/firestore";
-import {useState,useEffect, useContext} from 'react';
 import './context.js';
-import {Image, Component,TextInput, FlatList,TouchableHighlight } from 'react-native';
-import image1 from './pancake.jpg';
-//const CurrentUser = "kevin Gao";
-//console.log(CurrentUser);
+import {useState,useEffect, useContext} from 'react';
+import {ImageBackground,Image, Component,TextInput, FlatList,TouchableHighlight } from 'react-native';
 
-function FoodProfileScreen({navigation}) {
+import image1 from './strawberry.jpg';
+
+ export default function FilterRecipeScreen({navigation}) {
+ 
 
  
   const [filetext, setNewArray] = useState([]);
@@ -21,20 +21,29 @@ function FoodProfileScreen({navigation}) {
 	 
 };
 
- 
+  
 
    const getUser = async () => {
 
-   	const recipeRef = firestore().collection('user_profile_example').doc(global.config.userName).collection('recipes');
-	
+	const recipeRef = firestore().collection("recipes").doc(global.config.collection).collection(global.config.diet_res);
 	const snapshot = await recipeRef.get();
+
+
+if(snapshot._docs.length===0){
+
+navigation.navigate('Extra');
+ 	//setNewArray(filetext => [...filetext, {'title' :"no elements" , 'ID': "no elements" } ]       )    ;
+
+	}
+	else{
 	snapshot.forEach(doc => { doc.id, '=>', doc.data();
+
 	
- 	setNewArray(filetext => [...filetext, doc.id ]       )    ;
+ 	setNewArray(filetext => [...filetext, {'title' :doc.data().title , 'ID': doc.id } ]       )    ;
 
 	
         })
-        
+       } 
     }
     useEffect( () => {
         getUser();
@@ -56,6 +65,7 @@ const HeaderComponent = () => {
   return (
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionDescription}>Our List of Recipe!!</Text>
+      <Button title="Go back to the All Recipes"  onPress={() => {navigation.navigate('recipeDisplay'); }} />
     </View>
   );
 };
@@ -63,16 +73,18 @@ const HeaderComponent = () => {
 const FooterComponent = () => {
   return (
     <View style={styles.sectionContainer}>
-          <Button title="Go back to Home"  onPress={() => {navigation.navigate("Home") }} />
+      <Text style={styles.sectionDescription}>
+        credit to the dietise group.
+      </Text>
     </View>
   );
 };
   
 const renderItem = ({ item }) => (
             <React.Fragment>
-    <AuthorInfo recipe={item} />
-    
-    <Button title="press me to show you the recipe"  onPress={() => {navigation.navigate('recipeDetailsFavorite');global.config.title = item }} />
+    <AuthorInfo recipe={item.title} />
+
+    <Button title="press me to show you the recipe"  onPress={() => {navigation.navigate('FilterRecipeDetail');global.config.id = item.ID,global.config.title = item.title }} />
                 </React.Fragment>
   );
 
@@ -80,7 +92,7 @@ const renderItem = ({ item }) => (
   return (
   
      <SafeAreaView style={styles.container}>
- <ImageBackground source={image1} style={styles.image} imageStyle = {{   opacity:0.4,}}> 
+                        <ImageBackground source={image1} style={styles.image} imageStyle = {{   opacity:0.4,}} >
       <FlatList
         data={filetext}
         renderItem={renderItem}
@@ -90,12 +102,12 @@ const renderItem = ({ item }) => (
         ListFooterComponent={FooterComponent}
         
       />
-    </ImageBackground>
+                 </ImageBackground>
     </SafeAreaView>
   );
 }
-export default FoodProfileScreen;
- const styles = StyleSheet.create({
+
+const styles = StyleSheet.create({
    container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -184,3 +196,4 @@ export default FoodProfileScreen;
   
   
 });
+

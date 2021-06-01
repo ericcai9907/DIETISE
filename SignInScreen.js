@@ -7,8 +7,9 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
+    ImageBackground,
 } from 'react-native';
-
+import image1 from './eggs.jpg';
 import { UserContext } from './UserContext';
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
@@ -41,13 +42,21 @@ function SignInScreen({navigation}) {
     const getUser = async () => {
         const querySnapshot = await firestore().collection('user_profile_example').where("email", "==", email).get();
         const profDocs = querySnapshot.docs;
-        console.log(profDocs[0].data());
+      //  console.log(profDocs[0].data());
+        
+        //set hte userName to be the email address
+        global.config.userName = profDocs[0].data().name;
+         //       console.log(global.config.userName);
         setUserData(profDocs[0].data());
        // console.log(JSON.stringify(snapshot.data(), null, 2));
     }
     return (
         <SafeAreaView style={styles.container}>
+                           <ImageBackground source={image1} style={styles.image}>
+                 <View style = {{justifyContent : "center"}, {alignItems : 'center'}}>
             <Text style={styles.logo_title}>Dietise</Text>
+                    </View>
+                 <View style = {{justifyContent : "center"}, {alignItems : 'center'}}>     
             <View style={styles.inputView}>
                 <TextInput 
                     style={styles.inputText}
@@ -58,7 +67,8 @@ function SignInScreen({navigation}) {
                     value = {email}
                 />
             </View>
-            
+                                </View>
+                <View style = {{justifyContent : "center"}, {alignItems : 'center'}}>     
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.inputText}
@@ -70,23 +80,34 @@ function SignInScreen({navigation}) {
                     secureTextEntry
                 />
             </View>
+                        </View>
             {
                 error ?
                     <Text style={{ color: 'red'}}>{error}</Text>
                     : null
             }
+                            <View style = {{justifyContent : "center"}, {alignItems : 'center'}}>     
             <TouchableOpacity>
                 <Text style={styles.forgot}>Forgot Password</Text>
             </TouchableOpacity>
+            
+                        </View>
+                            <View style = {{justifyContent : "center"}, {alignItems : 'center'}}>     
             <TouchableOpacity 
                 style={styles.login_button}
                 onPress={() => signIn()} >
                     <Text>Login</Text>
             </TouchableOpacity>
+                        </View>
+            
+                            <View style = {{justifyContent : "center"}, {alignItems : 'center'}}>     
             <TouchableOpacity
                 onPress={() => navigation.navigate("SignUp")}>
                 <Text style={styles.loginText}>Sign-Up</Text>
             </TouchableOpacity>
+                        </View>
+            
+                             </ImageBackground>
         </SafeAreaView>
     );
 };
@@ -97,9 +118,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: "column",
+       
     },
     logo_title: {
         
@@ -131,12 +150,17 @@ const styles = StyleSheet.create({
         height:50,
         color:"white"
     },
+    image: {
+   flex:1,
+  resizeMode: 'stretch',
+   justifyContent:'center',
+  },
     forgot:{
-        color:"black",
+        color:"white",
         fontSize:11
     },
     loginText:{
-        color:"black"
+        color:"white"
     }
         
 });

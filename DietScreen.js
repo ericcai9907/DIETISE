@@ -1,15 +1,12 @@
 
 import React from 'react';
-import {ImageBackground, View, Text, Button, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import firestore from "@react-native-firebase/firestore";
-import {useState,useEffect, useContext} from 'react';
 import './context.js';
-import {Image, Component,TextInput, FlatList,TouchableHighlight } from 'react-native';
-import image1 from './pancake.jpg';
-//const CurrentUser = "kevin Gao";
-//console.log(CurrentUser);
-
-function FoodProfileScreen({navigation}) {
+import {useState,useEffect, useContext} from 'react';
+import {ImageBackground,Image, Component,TextInput, FlatList,TouchableHighlight } from 'react-native';
+import image1 from './pasta.jpg';
+ export default function DietScreen({navigation}) {
 
  
   const [filetext, setNewArray] = useState([]);
@@ -21,16 +18,15 @@ function FoodProfileScreen({navigation}) {
 	 
 };
 
- 
+  
 
    const getUser = async () => {
 
-   	const recipeRef = firestore().collection('user_profile_example').doc(global.config.userName).collection('recipes');
-	
+	const recipeRef = firestore().collection(global.config.diet);
 	const snapshot = await recipeRef.get();
 	snapshot.forEach(doc => { doc.id, '=>', doc.data();
 	
- 	setNewArray(filetext => [...filetext, doc.id ]       )    ;
+ 	setNewArray(filetext => [...filetext, {'title' :doc.data().description , 'ID': doc.id } ]       )    ;
 
 	
         })
@@ -42,7 +38,7 @@ function FoodProfileScreen({navigation}) {
     
     const AuthorInfo = ({  recipe }) => (
   <View style={styles.item}>
-    <Text style={styles.title}>{'Recipe : ' + recipe}</Text>
+    <Text style={styles.title}>{'Diet : ' + recipe}</Text>
   </View>
 );
 
@@ -55,7 +51,7 @@ function FoodProfileScreen({navigation}) {
 const HeaderComponent = () => {
   return (
     <View style={styles.sectionContainer}>
-      <Text style={styles.sectionDescription}>Our List of Recipe!!</Text>
+      <Text style={styles.sectionDescription}>Our List of Diet Restrictions!!</Text>
     </View>
   );
 };
@@ -63,16 +59,16 @@ const HeaderComponent = () => {
 const FooterComponent = () => {
   return (
     <View style={styles.sectionContainer}>
-          <Button title="Go back to Home"  onPress={() => {navigation.navigate("Home") }} />
+              <Button title="Go back to Home"  onPress={() => {navigation.navigate("Home") }} />
     </View>
   );
 };
   
 const renderItem = ({ item }) => (
             <React.Fragment>
-    <AuthorInfo recipe={item} />
+    <AuthorInfo recipe={item.ID} />
     
-    <Button title="press me to show you the recipe"  onPress={() => {navigation.navigate('recipeDetailsFavorite');global.config.title = item }} />
+    <Button title="press me to show you the description"  onPress={() => {navigation.navigate('DietDetail');global.config.diet_description = item.title,global.config.diet_res = item.ID.toLowerCase(); }} />
                 </React.Fragment>
   );
 
@@ -94,7 +90,7 @@ const renderItem = ({ item }) => (
     </SafeAreaView>
   );
 }
-export default FoodProfileScreen;
+
  const styles = StyleSheet.create({
    container: {
     flex: 1,
@@ -184,3 +180,5 @@ export default FoodProfileScreen;
   
   
 });
+
+

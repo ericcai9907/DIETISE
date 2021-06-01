@@ -3,7 +3,10 @@
 
 // Import React
 import React, {useState} from 'react';
+import ProfileScreen2 from './App.js';
 // Import required components
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import {
   SafeAreaView,
   StyleSheet,
@@ -21,8 +24,13 @@ import {
   launchCamera,
   launchImageLibrary
 } from 'react-native-image-picker';
+import Tflite from 'tflite-react-native';
 
-const CameraScreen = () => {
+let tflite = new Tflite();
+let imagepath = '';
+
+
+const CameraScreen = ({navigation}) => {
   const [filePath, setFilePath] = useState({});
 
   const requestCameraPermission = async () => {
@@ -63,6 +71,20 @@ const CameraScreen = () => {
       return false;
     } else return true;
   };
+  const Home = ({navigation})=>(
+  <View>
+  <TouchbleOpacity
+  	onPress = {()=>{navigation.navigate('recipeDisplay')}}>
+  	
+  	<Text> Click Here</Text>
+  	
+  	
+ </TouchbleOpacity> 	
+  
+  
+  
+  </View>
+  )
 
   const captureImage = async (type) => {
     let options = {
@@ -78,7 +100,7 @@ const CameraScreen = () => {
     let isStoragePermitted = await requestExternalWritePermission();
     if (isCameraPermitted && isStoragePermitted) {
       launchCamera(options, (response) => {
-        console.log('Response = ', response);
+     //   console.log('Response = ', response);
 
         if (response.didCancel) {
           alert('User cancelled camera picker');
@@ -93,14 +115,15 @@ const CameraScreen = () => {
           alert(response.errorMessage);
           return;
         }
-        console.log('base64 -> ', response.base64);
-        console.log('uri -> ', response.uri);
-        console.log('width -> ', response.width);
-        console.log('height -> ', response.height);
-        console.log('fileSize -> ', response.fileSize);
-        console.log('type -> ', response.type);
-        console.log('fileName -> ', response.fileName);
+       // console.log('base64 -> ', response.base64);
+        //console.log('uri -> ', response.uri);
+        //console.log('width -> ', response.width);
+        //console.log('height -> ', response.height);
+        //console.log('fileSize -> ', response.fileSize);
+        //console.log('type -> ', response.type);
+        //console.log('fileName -> ', response.fileName);
         setFilePath(response);
+     
       });
     }
   };
@@ -113,7 +136,7 @@ const CameraScreen = () => {
       quality: 1,
     };
     launchImageLibrary(options, (response) => {
-      console.log('Response = ', response);
+     // console.log('Response = ', response);
 
       if (response.didCancel) {
         alert('User cancelled camera picker');
@@ -128,6 +151,7 @@ const CameraScreen = () => {
         alert(response.errorMessage);
         return;
       }
+      /*
       console.log('base64 -> ', response.base64);
       console.log('uri -> ', response.uri);
       console.log('width -> ', response.width);
@@ -135,14 +159,43 @@ const CameraScreen = () => {
       console.log('fileSize -> ', response.fileSize);
       console.log('type -> ', response.type);
       console.log('fileName -> ', response.fileName);
+      */
       setFilePath(response);
+         //console.log(response.uri);
+         
+        imagepath=response.uri;
+          // console.log(imagepath);
+        tflite.loadModel({
+  model: 'food-id-red23lite.tflite',// required
+  labels: 'dishforandroid.txt',  // required
+  numThreads: 1,                              // defaults to 1  
+},
+);
+
+
+tflite.runModelOnImage({
+  path: imagepath,  // required
+  numResults: 5,    // defaults to 5
+  threshold: 0.1   // defaults to 0.1
+},
+(err, res) => {
+  if(err)
+   console.log(err);
+  else
+ //   console.log(res[0].label);
+    global.config.collection = res[0].label;
+    navigation.navigate('recipeDisplay');
+
+});
+
     });
   };
+
 
   return (
     <SafeAreaView style={{flex: 1}}>
       <Text style={styles.titleText}>
-        Example of Image Picker in React Native
+        Choose the image you take from the camera
       </Text>
       <View style={styles.container}>
         {/* <Image
@@ -184,6 +237,7 @@ const CameraScreen = () => {
           onPress={() => chooseFile('video')}>
           <Text style={styles.textStyle}>Choose Video</Text>
         </TouchableOpacity>
+  
       </View>
     </SafeAreaView>
   );

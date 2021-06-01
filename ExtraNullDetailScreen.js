@@ -1,48 +1,21 @@
 
 import React from 'react';
-import {ImageBackground, View, Text, Button, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import firestore from "@react-native-firebase/firestore";
-import {useState,useEffect, useContext} from 'react';
 import './context.js';
+import {useState,useEffect, useContext} from 'react';
 import {Image, Component,TextInput, FlatList,TouchableHighlight } from 'react-native';
-import image1 from './pancake.jpg';
-//const CurrentUser = "kevin Gao";
-//console.log(CurrentUser);
 
-function FoodProfileScreen({navigation}) {
 
- 
-  const [filetext, setNewArray] = useState([]);
-  const config = {
-	apiKey: "AIzaSyB-FhJXYwoBRZ8ys_MRtrLi8nAp1S77Ppo",
-	projectId: "recipes-a6ca1",
-	storageBucket: "recipes-a6ca1.appspot.com",
-	databaseURL:  "https://recipes-a6ca1-default-rtdb.firebaseio.com"
-	 
-};
 
+ export default function ExtraNullDetailScreen({navigation}) {
  
 
-   const getUser = async () => {
-
-   	const recipeRef = firestore().collection('user_profile_example').doc(global.config.userName).collection('recipes');
-	
-	const snapshot = await recipeRef.get();
-	snapshot.forEach(doc => { doc.id, '=>', doc.data();
-	
- 	setNewArray(filetext => [...filetext, doc.id ]       )    ;
-
-	
-        })
-        
-    }
-    useEffect( () => {
-        getUser();
-    },[])
+  
     
     const AuthorInfo = ({  recipe }) => (
   <View style={styles.item}>
-    <Text style={styles.title}>{'Recipe : ' + recipe}</Text>
+    <Text style={styles.title}>{'Result : ' + recipe}</Text>
   </View>
 );
 
@@ -63,7 +36,9 @@ const HeaderComponent = () => {
 const FooterComponent = () => {
   return (
     <View style={styles.sectionContainer}>
-          <Button title="Go back to Home"  onPress={() => {navigation.navigate("Home") }} />
+      <Text style={styles.sectionDescription}>
+        credit to the dietise group.
+      </Text>
     </View>
   );
 };
@@ -71,8 +46,6 @@ const FooterComponent = () => {
 const renderItem = ({ item }) => (
             <React.Fragment>
     <AuthorInfo recipe={item} />
-    
-    <Button title="press me to show you the recipe"  onPress={() => {navigation.navigate('recipeDetailsFavorite');global.config.title = item }} />
                 </React.Fragment>
   );
 
@@ -80,9 +53,8 @@ const renderItem = ({ item }) => (
   return (
   
      <SafeAreaView style={styles.container}>
- <ImageBackground source={image1} style={styles.image} imageStyle = {{   opacity:0.4,}}> 
       <FlatList
-        data={filetext}
+        data={["We either do not have recipes under that diet restriction or the recipe you searched for is not in our databse. Sorry about that"]}
         renderItem={renderItem}
         keyExtractor={item => item}
         ItemSeparatorComponent={SeparatorComponent}
@@ -90,16 +62,18 @@ const renderItem = ({ item }) => (
         ListFooterComponent={FooterComponent}
         
       />
-    </ImageBackground>
+      
     </SafeAreaView>
   );
 }
-export default FoodProfileScreen;
+
  const styles = StyleSheet.create({
-   container: {
+  container: {
     flex: 1,
     backgroundColor: '#fff',
-  
+    alignItems: 'center',
+   justifyContent: 'center',
+   flexDirection: "column",
   },
   logo:{
     fontWeight:"bold",
@@ -107,7 +81,6 @@ export default FoodProfileScreen;
     color:"#fb5b5a",
     marginBottom:40
   },
-  
   inputView:{
     width:"80%",
     backgroundColor:"#465881",
@@ -137,8 +110,13 @@ export default FoodProfileScreen;
   },
    image: {
    flex:1,
-  resizeMode: 'stretch',
-   justifyContent:'center',
+   position: 'absolute',
+   top:0,
+   left:0,
+   right:0,
+   bottom:0,
+   opacity:0.4,
+   justifyContent:'center'
   },
   loginText:{
     color:"black"
@@ -184,3 +162,8 @@ export default FoodProfileScreen;
   
   
 });
+
+
+
+
+
