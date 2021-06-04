@@ -1,13 +1,13 @@
 import React from 'react';
-import {Image, View, StyleSheet} from 'react-native';
+import {Image, View, StyleSheet, TouchableOpacity} from 'react-native';
 
 function PictureScreen({route}) {
     const { photo } = route.params;
     
     return (
-        <View style={styles.Container}>
-            <Image source={{ uri: photo.uri }} style={{width:380,height:550}}/>
-       </View>
+        <View style={styles.container}>
+            <Image source={{ uri: photo.uri }} style={styles.photo}/>
+        </View>
     );
 }
 
@@ -19,7 +19,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: "column",
     },
+    photo: {
+        width: 300,
+        height: 300,
+    }
         
 });

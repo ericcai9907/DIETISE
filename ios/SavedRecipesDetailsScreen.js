@@ -3,28 +3,22 @@ import { UserContext } from '../constants/UserContext';
 import { SafeAreaView, Button, FlatList, View, Text, StyleSheet } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 
-function RecipeDetailsScreen({route,navigation}) {
+function SavedRecipesDetailsScreen({route,navigation}) {
     const { userData } = useContext(UserContext);
-    const id = route.params.id;
-    const dish = route.params.dish;
+    const title = route.params.title;
     const db = firestore();
     const [fileText, setFileText] = useState([]);
     
     const getDetails = async () => {
-        await db.collection('recipes')
-        .doc(dish)
-        .collection('all')
-        .doc(id)
+        await db.collection('user_profile_example')
+        .doc(userData.name)
+        .collection('recipes')
+        .doc(title)
         .get()
         .then(documentSnapshot => {
-            setFileText(fileText => [...fileText, {"key" : "Dish", "value" : documentSnapshot.data().title}]);
+            setFileText(fileText => [...fileText, {"key" : "Dish", "value" : documentSnapshot.id}]);
             setFileText(fileText => [...fileText, {"key" : "Ingredients", "value" : documentSnapshot.data().ingredients}]);
-            if(documentSnapshot.data().instructions!==undefined) {
-                setFileText(fileText => [...fileText, {"key" : "Instructions", "value" : documentSnapshot.data().instructions}]);
-            }
-            else {
-                setFileText(fileText => [...fileText, {"key" : "Instructions", "value" : documentSnapshot.data().directions}]);
-            }
+            setFileText(fileText => [...fileText, {"key" : "Instructions", "value" : documentSnapshot.data().instructions}]);
         });
     }
     useEffect(() => {
@@ -38,7 +32,7 @@ function RecipeDetailsScreen({route,navigation}) {
             return (
             <FlatList
                 data = {details.value}
-                renderItem ={({item,index}) => (
+                renderItem ={({item}) => (
                     <Text style={styles.title}>{item}</Text>
                 )}
                 keyExtractor={(item,index) => String(index)}
@@ -65,19 +59,9 @@ function RecipeDetailsScreen({route,navigation}) {
         return <View style={styles.separatorLine}/>
     }
 
-    const pushData = async () => {
-        
-        await db.collection('user_profile_example')
-        .doc(userData.name)
-        .collection('recipes')
-        .doc(fileText[0].value)
-        .set({'ingredients': fileText[1].value, 'instructions': fileText[2].value})
-    }
-
     const HeaderComponent = () => {
         return (
             <View style={styles.sectionContainer}>
-                <Button title="Save Recipe" onPress={() => pushData()}/>
                 <Text style={styles.sectionDescription}>Our List of Recipe Details!</Text>
             </View>
         );
@@ -89,7 +73,6 @@ function RecipeDetailsScreen({route,navigation}) {
                 <Text style={styles.sectionDescription}>
                     Credit to the Dietise group.
                 </Text>
-                <Button title="Home" onPress={() => navigation.navigate("Home")}/>
             </View>
         );
     }
@@ -108,7 +91,7 @@ function RecipeDetailsScreen({route,navigation}) {
     );
 }
 
-export default RecipeDetailsScreen;
+export default SavedRecipesDetailsScreen;
 
 const styles = StyleSheet.create({
     container: {

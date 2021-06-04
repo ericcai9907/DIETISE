@@ -8,9 +8,13 @@ import CameraScreen from '../screens/CameraScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import PictureScreen from '../screens/PictureScreen';
 import SignUpScreen from '../screens/SignUpScreen';
-
 import { UserContext } from '../constants/UserContext';
-
+import photoTestScreen from '../screens/photoTestScreen';
+import RecipeDisplayScreen from '../screens/RecipeDisplayScreen';
+import RecipeDetailsScreen from '../screens/RecipeDetailsScreen';
+import DietScreen from '../screens/DietScreen';
+import SavedRecipesScreen from '../screens/SavedRecipesScreen';
+import SavedRecipesDetailsScreen from '../screens/SavedRecipesDetailsScreen'
 const Stack = createStackNavigator();
 
 const MainStackNavigator = () => {
@@ -32,6 +36,12 @@ const MainStackNavigator = () => {
                 <Stack.Screen name="Profile" component={ProfileScreen} />
                 <Stack.Screen name="Picture" component={PictureScreen} />
                 <Stack.Screen name="SignUp" component={SignUpScreen} />
+                <Stack.Screen name="photoTest" component={photoTestScreen} />
+                <Stack.Screen name="RecipeDisplay" component={RecipeDisplayScreen}/>
+                <Stack.Screen name="RecipeDetails" component={RecipeDetailsScreen}/>
+                <Stack.Screen name="Diet" component={DietScreen}/>
+                <Stack.Screen name="SavedRecipes" component={SavedRecipesScreen}/>
+                <Stack.Screen name="SavedDetails" component={SavedRecipesDetailsScreen}/>
             </Stack.Navigator>
         </UserContext.Provider>
     );

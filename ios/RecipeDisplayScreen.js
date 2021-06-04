@@ -13,7 +13,7 @@ function RecipeDisplayScreen({route, navigation}) {
     const getRecipes = async () => {
         await db.collection('recipes')
         .doc(dish)
-        .collection('all')
+        .collection(userData.diet.toLowerCase())
         .get()
         .then(querySnapshot => {
             if (querySnapshot.empty) {
@@ -21,7 +21,7 @@ function RecipeDisplayScreen({route, navigation}) {
                 return;
             }
             querySnapshot.forEach(documentSnapshot => {
-            setFileText(fileText => [...fileText, {'Title': documentSnapshot.data().title, 'ID': documentSnapshot.id}]);
+                setFileText(fileText => [...fileText, {'Title': documentSnapshot.data().title, 'ID': documentSnapshot.id}]);
             });
         });
     }
@@ -85,7 +85,7 @@ function RecipeDisplayScreen({route, navigation}) {
             <FlatList
                 data = {fileText}
                 renderItem={renderItem}
-                keyExtractor={item => item.ID}
+                keyExtractor={(item,index) => String(index)}
                 ItemSeparatorComponent={SeparatorComponent}
                 ListHeaderComponent={HeaderComponent}
                 ListFooterComponent={FooterComponent}
