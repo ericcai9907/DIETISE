@@ -6,7 +6,7 @@ UCI MCS Capstone Project: An App that recommends recipes for food based on user 
 ## Food Classification Model
 ---
 
-The source code for the models that we used can be found in [Food-Classification-Model](../Food-Classification-Model).
+The source code for the models that we used can be found in [Food-Classification-Model](Food-Classification-Model).
 
 <p>
 The food classification model is a CNN Keras Image Classification model. This model is trained on the MAFood121 Dataset<sup>1</sup> from the University of Barcelona and is transfer learned on MobileNetV2. 
