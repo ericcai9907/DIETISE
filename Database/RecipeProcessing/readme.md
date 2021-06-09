@@ -25,4 +25,5 @@ This directory holds the scripts used to preprocess the data so that it would be
   <strong> jsonreader.py </strong> was a test script that I used to confirm how to extract data from json files and use them in the way that I wanted. 
 </p>
 ---
+
 * For the diet-based extraction of data, this is an effective but space inefficient method. A better use of this would to have tags in the documents for each recipe that indicated which diets it is suitable for. This would be more intensive on the query call for the recipes but would be more efficient in terms of memory and operations for the database. This is something that can be improved on for this project.  
