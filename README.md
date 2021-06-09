@@ -19,7 +19,7 @@ The food classification model is a CNN Keras Image Classification model. This mo
 
 ## Recipe/User Database
 ---
-The source code for updating and adding into our database can be found in [Database](../Database).
+The source code for updating and adding into our database can be found in [Database](Database).
 <p>
   The database that we used is Firebase FireStoreDB a noSQL database. This was chosen as it allowed easier integration with our React Native Application. 
 </p>
@@ -41,9 +41,9 @@ Though the App was written in React Native which is cross-platform, the differen
 ---
 ### Android
 ---
-The source code for our Android version of the Application can be found in [Android](../Android).
+The source code for our Android version of the Application can be found in [Android](Android).
 
 
 ### iOS
 ---
-The source code for our Android version of the Application can be found in [iOS](../iOS).
+The source code for our Android version of the Application can be found in [iOS](iOS).
