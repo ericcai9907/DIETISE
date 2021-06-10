@@ -43,7 +43,11 @@ Though the App was written in React Native which is cross-platform, the differen
 ---
 The source code for our Android version of the Application can be found in [Android](Android).
 
+Playlist of demo videos for Android: https://www.youtube.com/playlist?list=PLFXGRu6qXipRnxP5vpDb1NnsnMuTK7ITo
+
 
 ### iOS
 ---
 The source code for our Android version of the Application can be found in [iOS](iOS).
+
+Playlist of demo videos for iOS: https://www.youtube.com/playlist?list=PLFXGRu6qXipSXROIALIdpY8fstXNh3_Vo
