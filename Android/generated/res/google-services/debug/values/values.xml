@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">710659050025-p9eldh2pv26to3pol080buum9ip9edhn.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://recipes-a6ca1-default-rtdb.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">710659050025</string>
+    <string name="google_api_key" translatable="false">AIzaSyB-FhJXYwoBRZ8ys_MRtrLi8nAp1S77Ppo</string>
+    <string name="google_app_id" translatable="false">1:710659050025:android:0dc6396c2b9a96deaaaa38</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyB-FhJXYwoBRZ8ys_MRtrLi8nAp1S77Ppo</string>
+    <string name="google_storage_bucket" translatable="false">recipes-a6ca1.appspot.com</string>
+    <string name="project_id" translatable="false">recipes-a6ca1</string>
+</resources>
